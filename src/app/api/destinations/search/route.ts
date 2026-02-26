@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { z } from "zod";
 import { inventory } from "@/data/inventory";
 import { destinationImages } from "@/data/destinationImages";
+import { SearchResult } from "@/types";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const ResponseSchema = z.object({
@@ -62,8 +63,8 @@ ${JSON.stringify(inventory)} `;
         const safeMatches = parsed.matches.filter(match =>
             validIds.includes(match.id)
         );
-        const finalResults = safeMatches.map(match => {
-            const item = inventory.find(i => i.id === match.id);
+        const finalResults: SearchResult[] = safeMatches.map(match => {
+            const item = inventory.find(i => i.id === match.id)!;
             const imageItem = destinationImages.find(img => img.id === match.id);
 
             return {

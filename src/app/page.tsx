@@ -5,12 +5,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Recommendations from "@/components/Recommendations";
-import { Destination } from "@/types";
+import { SearchResult } from "@/types";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<Destination[] | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = async (queryToSearch: string) => {
@@ -50,7 +50,7 @@ export default function Home() {
           isSearching={isSearching}
         />
         {searchResults !== null && (
-          <Recommendations searchResults={searchResults} searchQuery={activeSearchQuery} />
+          <Recommendations searchResults={searchResults} searchQuery={activeSearchQuery} isSearching={isSearching} />
         )}
       </main>
       <Footer />
