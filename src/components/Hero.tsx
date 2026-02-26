@@ -30,12 +30,12 @@ export default function Hero({ searchQuery, setSearchQuery, onSearch, isSearchin
                 <div className="mx-auto mt-12 max-w-3xl">
                     <div className="relative group">
                         <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary to-secondary opacity-25 blur transition duration-1000 group-hover:opacity-50 group-hover:duration-200"></div>
-                        <div className="relative flex items-center rounded-2xl bg-white dark:bg-slate-800 p-2 shadow-xl ring-1 ring-slate-900/5">
-                            <div className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-700 text-primary dark:text-secondary">
+                        <div className="relative flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-0 rounded-2xl bg-white dark:bg-slate-800 p-2 shadow-xl ring-1 ring-slate-900/5">
+                            <div className="hidden md:flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-700 text-primary dark:text-secondary">
                                 <span className="material-symbols-outlined text-3xl">magic_button</span>
                             </div>
                             <input
-                                className="flex-auto bg-transparent border-0 px-4 py-3 text-lg text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 outline-none"
+                                className="flex-auto bg-transparent border-0 px-4 py-4 md:py-3 text-lg text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 outline-none text-center md:text-left"
                                 placeholder="e.g., a chilled beach weekend with surfing vibes under $100"
                                 type="text"
                                 value={searchQuery}
@@ -47,7 +47,7 @@ export default function Hero({ searchQuery, setSearchQuery, onSearch, isSearchin
                             <button
                                 onClick={() => onSearch(searchQuery)}
                                 disabled={isSearching}
-                                className="flex-none rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all cursor-pointer disabled:opacity-50">
+                                className="flex-none rounded-xl bg-primary px-6 py-4 md:py-3 text-sm font-bold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all cursor-pointer disabled:opacity-50 w-full md:w-auto">
                                 {isSearching ? "Scouting..." : "Scout Locations"}
                             </button>
                         </div>

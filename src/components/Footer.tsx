@@ -9,7 +9,9 @@ export default function Footer() {
                         </div>
                         <span className="text-lg font-bold text-slate-900 dark:text-white">Smart Travel Scout</span>
                     </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">© 2026 Smart Travel Scout. All rights reserved.</p>
+                    <p className="text-sm text-center text-slate-500 dark:text-slate-400">
+                        © 2026 Smart Travel Scout. <br className="block sm:hidden" /> All rights reserved.
+                    </p>
                 </div>
             </div>
         </footer>

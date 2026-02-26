@@ -5,15 +5,15 @@ export interface MatchReason {
 }
 
 export interface Destination {
-    id: string;
+    id: number;
     title: string;
-    country: string;
+    location: string;
     price: number;
-    rating: number;
-    reviews: string;
+    tags: string[];
+}
+
+export interface SearchResult extends Destination {
     imageUrl: string;
-    imageAlt: string;
-    matchReasons: MatchReason[];
-    avatars: string[];
-    additionalFriends: number;
+    reason: string;
+    matchedTags: string[];
 }

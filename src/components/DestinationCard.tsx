@@ -1,11 +1,16 @@
-export default function DestinationCard({ destination }: { destination: any }) {
+import { SearchResult } from "@/types";
+import Image from "next/image";
+
+export default function DestinationCard({ destination }: { destination: SearchResult }) {
     return (
         <div className="group flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:border-primary/20 transition-all duration-300">
             <div className="relative overflow-hidden bg-slate-200 aspect-[4/3] w-full">
-                <img
+                <Image
                     alt={destination.title}
-                    className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                     src={destination.imageUrl}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 {/* Heart icon removed */}
                 {/* <div className="absolute bottom-4 left-4">
