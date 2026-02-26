@@ -1,4 +1,11 @@
-export default function Hero() {
+interface HeroProps {
+    searchQuery: string;
+    setSearchQuery: (val: string) => void;
+    onSearch: (val: string) => void;
+    isSearching: boolean;
+}
+
+export default function Hero({ searchQuery, setSearchQuery, onSearch, isSearching }: HeroProps) {
     return (
         <section className="relative isolate overflow-hidden bg-surface-light dark:bg-surface-dark pb-16 pt-14 lg:pb-32 lg:pt-24">
             {/* Abstract Background Pattern */}
@@ -27,26 +34,44 @@ export default function Hero() {
                             <div className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-700 text-primary dark:text-secondary">
                                 <span className="material-symbols-outlined text-3xl">magic_button</span>
                             </div>
-                            <input className="flex-auto bg-transparent border-0 px-4 py-3 text-lg text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 outline-none" placeholder="e.g., a chilled beach weekend with surfing vibes under $100" type="text" />
-                            <button className="flex-none rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all cursor-pointer">
-                                Scout Locations
+                            <input
+                                className="flex-auto bg-transparent border-0 px-4 py-3 text-lg text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 outline-none"
+                                placeholder="e.g., a chilled beach weekend with surfing vibes under $100"
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') onSearch(searchQuery);
+                                }}
+                            />
+                            <button
+                                onClick={() => onSearch(searchQuery)}
+                                disabled={isSearching}
+                                className="flex-none rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all cursor-pointer disabled:opacity-50">
+                                {isSearching ? "Scouting..." : "Scout Locations"}
                             </button>
                         </div>
                     </div>
 
                     {/* Suggestion Pills */}
                     <div className="mt-6 flex flex-wrap justify-center gap-3">
-                        <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-white hover:border-primary/50 transition-colors">
+                        <button
+                            onClick={() => setSearchQuery("Sri Lankan Adventures")}
+                            className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-white hover:border-primary/50 transition-colors">
                             <span className="material-symbols-outlined text-[16px]">landscape</span>
-                            Hiking in Swiss Alps
+                            Sri Lankan Adventures
                         </button>
-                        <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-white hover:border-primary/50 transition-colors">
-                            <span className="material-symbols-outlined text-[16px]">coffee</span>
-                            Digital nomad cafes in Tokyo
+                        <button
+                            onClick={() => setSearchQuery("Budget trips under $100")}
+                            className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-white hover:border-primary/50 transition-colors">
+                            <span className="material-symbols-outlined text-[16px]">payments</span>
+                            Budget trips under $100
                         </button>
-                        <button className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-white hover:border-primary/50 transition-colors">
-                            <span className="material-symbols-outlined text-[16px]">museum</span>
-                            Art history tour in Florence
+                        <button
+                            onClick={() => setSearchQuery("Ancient Heritage")}
+                            className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-white hover:border-primary/50 transition-colors">
+                            <span className="material-symbols-outlined text-[16px]">account_balance</span>
+                            Ancient Heritage
                         </button>
                     </div>
                 </div>
