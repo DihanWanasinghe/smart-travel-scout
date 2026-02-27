@@ -1,10 +1,18 @@
 import { SearchResult } from "@/types";
 import Image from "next/image";
 
+
+//Search Results are displayed as Cards via the DestinationCard component
+// One card for each object in the api response array
 export default function DestinationCard({ destination }: { destination: SearchResult }) {
     return (
         <div className="group flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:border-primary/20 transition-all duration-300">
             <div className="relative overflow-hidden bg-slate-200 aspect-[4/3] w-full">
+                {/* 
+                  Using next/image instead of standard <img> for automatic Core Web Vitals optimization.
+                  It serves webp/avif, lazy loads by default, and prevents layout shift via constraints.
+                  The `sizes` attribute gives the browser hints on which resolution image to download based on viewport.
+                */}
                 <Image
                     alt={destination.title}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -12,13 +20,6 @@ export default function DestinationCard({ destination }: { destination: SearchRe
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                {/* Heart icon removed */}
-                {/* <div className="absolute bottom-4 left-4">
-                    <span className="inline-flex items-center rounded-lg bg-white/90 px-2 py-1 text-xs font-bold text-slate-900 backdrop-blur-sm">
-                        <span className="material-symbols-outlined mr-1 text-base text-yellow-500">star</span>
-                        {destination.rating} ({destination.reviews} reviews)
-                    </span>
-                </div> */}
             </div>
             <div className="flex flex-1 flex-col p-6">
                 <div className="flex items-start justify-between">

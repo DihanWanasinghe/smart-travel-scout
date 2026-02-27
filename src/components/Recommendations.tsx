@@ -12,7 +12,12 @@ export default function Recommendations({ searchResults, searchQuery, isSearchin
         <section className="bg-white dark:bg-background-dark py-16 lg:py-24">
             <div className="mx-auto max-w-7xl px-6 lg:px-8 relative min-h-[300px]">
 
-                {/* Main Content Area (Blurred when searching) */}
+                {/* Main Content Area 
+                    Why blur instead of unmounting? 
+                    Keeps the previous search results immediately visible but inactive, 
+                    creating a much smoother aesthetic transition for the user rather than flashing empty screens. 
+                    'pointer-events-none' ensures users can't click cards while the AI is computing the next batch.
+                */}
                 <div className={`transition-all duration-300 ${isSearching ? 'opacity-40 blur-sm pointer-events-none' : ''}`}>
 
                     {searchResults.length === 0 ? (

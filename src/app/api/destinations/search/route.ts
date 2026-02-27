@@ -6,6 +6,13 @@ import { destinationImages } from "@/data/destinationImages";
 import { SearchResult } from "@/types";
 import { rateLimit } from "@/lib/rate-limit";
 
+/**
+ * We use Zod here to strictly parse and validate the AI's JSON output.
+ * Since LLMs can sometimes return malformed JSON or hallucinated fields,
+ * validating it against a schema ensures the frontend only receives safe, 
+ * expected data structures and prevents runtime crashes.
+ */
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const ResponseSchema = z.object({
     matches: z.array(
@@ -19,6 +26,13 @@ const ResponseSchema = z.object({
 
 
 // Initialize the rate limiter with 5 requests per minute
+/**
+ * Using an in-memory rate limiter here because this app is currently deployed 
+ * on a single serverless edge/lambda instance (e.g., Vercel without multi-region scaling). 
+ * If scaling horizontally across multiple instances in the future, 
+ * this should be entirely replaced by a centralized store like Redis (e.g., Upstash)
+ * to ensure limits are shared globally across all servers.
+ */
 const limiter = rateLimit({
     limit: 5,
     windowMs: 60 * 1000,
@@ -39,9 +53,21 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { query } = body;
 
+    // 3. Configure Google Generative AI
+    // We strictly use gemini-2.5-flash because it provides the best balance of speed, 
+    // cost-efficiency, and high rate limits suitable for real-time natural language search.
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash", // This points to the latest stable 2.0 Flash model
+        model: "gemini-2.5-flash",
     });
+
+    /**
+     * The Prompt Design Strategy:
+     * We use a highly constrictive "system" prompt to prevent hallucinations.
+     * By injecting the exact JSON `inventory` directly into the prompt (a rudimentary form of in-context learning),
+     * we force the model to *only* select from pre-approved destinations.
+     * If the inventory grows > 1,000 items, this will need to be replaced by a RAG (Retrieval-Augmented Generation) pipeline 
+     * using vector embeddings to avoid exceeding context window limits and reducing costs.
+     */
     const prompt = `You are a travel matching assistant.
 
 You MUST ONLY return items from the provided inventory.
@@ -94,16 +120,20 @@ ${JSON.stringify(inventory)}`;
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
 
+        // LLMs frequently wrap JSON inside markdown blocks (```json ... ```).
+        // This simple regex sanitization is mandatory to ensure JSON.parse doesn't throw a syntax error.
         const cleaned = responseText
             .replace(/```json/g, "")
             .replace(/```/g, "")
             .trim();
+        //validates with the Zod schema
         const parsed = ResponseSchema.parse(JSON.parse(cleaned));
         const validIds = inventory.map(item => item.id);
 
         const safeMatches = parsed.matches.filter(match =>
             validIds.includes(match.id)
         );
+        // finalResults get the image url from destinationImages
         const finalResults: SearchResult[] = safeMatches.map(match => {
             const item = inventory.find(i => i.id === match.id)!;
             const imageItem = destinationImages.find(img => img.id === match.id);

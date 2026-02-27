@@ -8,8 +8,16 @@ import Recommendations from "@/components/Recommendations";
 import { SearchResult } from "@/types";
 
 export default function Home() {
+  // `searchQuery` tracks the live input in the search box (used by the Hero component).
   const [searchQuery, setSearchQuery] = useState("");
+
+  // `activeSearchQuery` tracks the query that actually produced the *current* set of results.
+  // Why two states? If a user types "Beach" and hits search, activeSearchQuery becomes "Beach". 
+  // If they then type "Mountain" into the input but *haven't* hit search yet, we still want the 
+  // Recommendations header to say "Results for Beach", preventing a UI mismatch during typing.
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
+
+  // Holds the actual AI-returned destination matches. Null means "hasn't searched yet".
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
@@ -26,6 +34,8 @@ export default function Home() {
 
       const data = await response.json();
 
+      // We explicitly check for 429 to provide immediate, actionable feedback to the user,
+      // as relying solely on '!response.ok' might obscure that they are just sending too many requests.
       if (response.status === 429) {
         alert(data.error || "Too many requests. Please try again later.");
         setSearchResults([]);

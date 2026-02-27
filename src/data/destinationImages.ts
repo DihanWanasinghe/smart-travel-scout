@@ -3,6 +3,9 @@ export interface DestinationImage {
     imageUrl: string;
 }
 
+// The Image URLs are seperated from the inventory to keep it seperate from the assessment data 
+// even thought the content in here can be combined with the content in inventory.tsx
+
 export const destinationImages: DestinationImage[] = [
     {
         // Nuwara Eliya (Tea Plantations)

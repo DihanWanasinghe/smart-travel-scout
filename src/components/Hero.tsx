@@ -6,6 +6,10 @@ interface HeroProps {
 }
 
 export default function Hero({ searchQuery, setSearchQuery, onSearch, isSearching }: HeroProps) {
+    // Why is state lifted up to page.tsx instead of keeping it entirely within Hero?
+    // Because the sister component, 'Recommendations', needs to know when to show 
+    // the loading state (isSearching) and what the final query was (activeSearchQuery).
+    // The Hero acts purely as a controlled component, delegating search logic up.
     return (
         <section className="relative isolate overflow-hidden bg-surface-light dark:bg-surface-dark pb-16 pt-14 lg:pb-32 lg:pt-24">
             {/* Abstract Background Pattern */}

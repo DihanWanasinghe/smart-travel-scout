@@ -6,6 +6,9 @@ export interface InventoryItem {
   tags: string[];
 }
 
+// assessment data  provided in the project documentation
+// This is the data that the AI will use to generate the search results
+// The AI will use this data to generate the search results
 export const inventory: InventoryItem[] = [
   {
     id: 1,
