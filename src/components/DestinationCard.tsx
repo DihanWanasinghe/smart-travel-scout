@@ -1,5 +1,6 @@
 import { SearchResult } from "@/types";
 import Image from "next/image";
+import Icon from "./Icon";
 
 
 //Search Results are displayed as Cards via the DestinationCard component
@@ -35,12 +36,12 @@ export default function DestinationCard({ destination }: { destination: SearchRe
                 <div className="mt-6 flex-1">
                     <div className="rounded-xl bg-surface-light dark:bg-slate-800 p-4">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="material-symbols-outlined text-primary text-sm">psychology</span>
+                            <Icon name="psychology" className="text-primary text-sm" />
                             <span className="text-xs font-bold uppercase tracking-wide text-primary">Why this matches</span>
                         </div>
                         <div className="space-y-3">
                             <div className="flex items-start gap-3">
-                                <span className="material-symbols-outlined text-slate-400 text-lg mt-0.5">auto_awesome</span>
+                                <Icon name="auto_awesome" className="text-slate-400 text-lg mt-0.5" />
                                 <div className="flex flex-col gap-2">
                                     <p className="text-sm text-slate-600 dark:text-slate-300">
                                         {destination.reason}

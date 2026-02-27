@@ -1,5 +1,6 @@
 import { SearchResult } from "@/types";
 import DestinationCard from "./DestinationCard";
+import Icon from "./Icon";
 
 interface RecommendationsProps {
     searchResults: SearchResult[];
@@ -49,7 +50,7 @@ export default function Recommendations({ searchResults, searchQuery, isSearchin
                 {/* Loading Overlay */}
                 {isSearching && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                        <span className="material-symbols-outlined text-primary text-5xl animate-spin mb-4">progress_activity</span>
+                        <Icon name="progress_activity" className="text-primary text-5xl animate-spin mb-4" />
                         <p className="text-slate-900 dark:text-white font-bold text-lg drop-shadow-md">
                             Scouting your next destination...
                         </p>
