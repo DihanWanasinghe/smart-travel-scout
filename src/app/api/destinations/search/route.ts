@@ -4,6 +4,7 @@ import { z } from "zod";
 import { inventory } from "@/data/inventory";
 import { destinationImages } from "@/data/destinationImages";
 import { SearchResult } from "@/types";
+import { rateLimit } from "@/lib/rate-limit";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const ResponseSchema = z.object({
@@ -16,7 +17,25 @@ const ResponseSchema = z.object({
     )
 });
 
+
+// Initialize the rate limiter with 5 requests per minute
+const limiter = rateLimit({
+    limit: 5,
+    windowMs: 60 * 1000,
+});
+
 export async function POST(req: Request) {
+    // 1. Rate Limiting Check
+    try {
+        await limiter(req);
+    } catch (error) {
+        return NextResponse.json(
+            { error: "Too many requests, please try again later." },
+            { status: 429 }
+        );
+    }
+
+    // 2. Parse Body and Generate
     const body = await req.json();
     const { query } = body;
 

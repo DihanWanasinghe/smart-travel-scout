@@ -23,7 +23,21 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: queryToSearch })
       });
+
       const data = await response.json();
+
+      if (response.status === 429) {
+        alert(data.error || "Too many requests. Please try again later.");
+        setSearchResults([]);
+        return;
+      }
+
+      if (!response.ok) {
+        console.error("Search failed:", data.error);
+        setSearchResults([]);
+        return;
+      }
+
       if (data.results) {
         setSearchResults(data.results);
         // Only update the "active" term once we actually have results for it
