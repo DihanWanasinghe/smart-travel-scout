@@ -42,16 +42,35 @@ export async function POST(req: Request) {
     const model = genAI.getGenerativeModel({
         model: "gemini-3-flash-preview", // This points to the latest stable 2.0 Flash model
     });
-    const prompt = `
-You are a travel matching assistant.
+    const prompt = `You are a travel matching assistant.
 
 You MUST ONLY return items from the provided inventory.
 DO NOT invent new destinations.
 DO NOT suggest anything outside the list.
 
 CRITICAL INSTRUCTION:
-If the user's request specifies a location, city, country, or core intent that fundamentally does not exist in the inventory (for example, asking for "Florence" when only Sri Lankan destinations are available), you MUST return an empty array [] for "matches". 
+If the user's request specifies a location, city, country, or core intent that fundamentally does not exist in the inventory (for example, asking for "Florence" when only Sri Lankan destinations are available), you MUST return an empty array [] for "matches".
 Do NOT return partial matches just because a single word (like "history") aligns with a tag, if the location or primary subject of the request is completely different.
+
+EVALUATION RUBRIC:
+
+When deciding matches, follow these rules in order:
+
+1. Tag alignment is the strongest signal.
+   - Exact tag matches are strong signals.
+   - Clear semantic equivalents are medium signals.
+
+2. Budget constraints must be respected.
+   - If a maximum budget is specified, exclude items exceeding it unless the user allows flexibility.
+
+3. Location preference increases priority.
+   - Exact location match = strong signal.
+   - Implied geography (e.g., beach, cold climate) = medium signal.
+
+4. If constraints conflict (e.g., beach + cold when no such item exists), return no matches.
+
+5. Only return items with meaningful overall alignment.
+   Do not force weak matches.
 
 Return ONLY valid JSON in this format:
 {
@@ -66,9 +85,12 @@ User request:
 ${query}
 
 Inventory:
-${JSON.stringify(inventory)} `;
+${JSON.stringify(inventory)}`;
 
     try {
+        if (!query || !query.trim()) {
+            return NextResponse.json({ results: [] });
+        }
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
 

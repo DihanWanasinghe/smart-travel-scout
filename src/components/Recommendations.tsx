@@ -18,7 +18,7 @@ export default function Recommendations({ searchResults, searchQuery, isSearchin
                     {searchResults.length === 0 ? (
                         <div className="text-center py-12">
                             <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">No Destinations Found</h2>
-                            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Try adjusting your search query.</p>
+                            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Could you tell me your preferred budget, location, or activity while adjusting your search query?</p>
                         </div>
                     ) : (
                         <>
