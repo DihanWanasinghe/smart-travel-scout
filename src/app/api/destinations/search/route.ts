@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const { query } = body;
 
     const model = genAI.getGenerativeModel({
-        model: "gemini-3-flash-preview", // This points to the latest stable 2.0 Flash model
+        model: "gemini-2.5-flash", // This points to the latest stable 2.0 Flash model
     });
     const prompt = `You are a travel matching assistant.
 
